@@ -1,6 +1,7 @@
 
 using System;
 using System.IO;
+using TMPro;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -27,11 +28,12 @@ public class DataFlowManager : MonoBehaviour
     public string PlayerName { get; private set; }
     
     public GameObject nameEntryGameObject;
-    private InputField _nameField;
+    private TMP_InputField _nameField;
 
     private void Start()
     {
-        _nameField = nameEntryGameObject.GetComponent<InputField>();
+        _nameField = nameEntryGameObject.GetComponent<TMP_InputField>();
+        Instance._nameField = _nameField;
     }
 
     private void Awake()
