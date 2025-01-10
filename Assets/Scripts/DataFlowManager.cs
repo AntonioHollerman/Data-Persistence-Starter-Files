@@ -1,5 +1,6 @@
 
 using System.IO;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -58,5 +59,14 @@ public class DataFlowManager : MonoBehaviour
 
             highScore = data;
         }
+    }
+
+    public void Exit()
+    {
+        #if UNITY_EDITOR
+            EditorApplication.ExitPlaymode();
+        #else
+                Application.Quit(); // original code to quit Unity player
+        #endif
     }
 }
