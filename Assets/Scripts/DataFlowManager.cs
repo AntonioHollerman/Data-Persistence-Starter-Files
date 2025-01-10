@@ -1,7 +1,9 @@
 
+using System;
 using System.IO;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class DataFlowManager : MonoBehaviour
@@ -20,7 +22,18 @@ public class DataFlowManager : MonoBehaviour
     }
 
     public static DataFlowManager Instance { get; private set; }
-    public HighScore highScore;
+    
+    public HighScore CurrentHighScore { get; private set; }
+    public string PlayerName { get; private set; }
+    
+    public GameObject nameEntryGameObject;
+    private InputField _nameField;
+
+    private void Start()
+    {
+        _nameField = nameEntryGameObject.GetComponent<InputField>();
+    }
+
     private void Awake()
     {
         // start of new code
@@ -38,7 +51,7 @@ public class DataFlowManager : MonoBehaviour
 
     public void SaveHighScore(string playerName, int newScore)
     {
-        if (highScore != null && highScore.Score > newScore)
+        if (CurrentHighScore != null && CurrentHighScore.Score > newScore)
         {
             return;
         }
@@ -46,7 +59,7 @@ public class DataFlowManager : MonoBehaviour
         HighScore data = new HighScore(playerName, newScore);
         string json = JsonUtility.ToJson(data);
         File.WriteAllText(Application.persistentDataPath + "/savefile.json", json);
-        highScore = data;
+        CurrentHighScore = data;
     }
 
     private void LoadHighScore()
@@ -57,7 +70,11 @@ public class DataFlowManager : MonoBehaviour
             string json = File.ReadAllText(path);
             HighScore data = JsonUtility.FromJson<HighScore>(json);
 
-            highScore = data;
+            CurrentHighScore = data;
+        }
+        else
+        {
+            CurrentHighScore = new HighScore("Null", 0);
         }
     }
 
@@ -68,5 +85,18 @@ public class DataFlowManager : MonoBehaviour
         #else
                 Application.Quit(); // original code to quit Unity player
         #endif
+    }
+
+    public void Play()
+    {
+        string playerName = _nameField.text;
+        if (playerName.Length == 0)
+        {
+            _nameField.text = "Enter Name";
+            return;
+        }
+
+        PlayerName = playerName;
+        SceneManager.LoadScene(1);
     }
 }

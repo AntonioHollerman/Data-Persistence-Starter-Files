@@ -15,13 +15,22 @@ public class MainManager : MonoBehaviour
     
     private bool m_Started = false;
     private int m_Points;
-    
+
+    public GameObject bestPlayerGo;
     private bool m_GameOver = false;
+    private string _name;
+    private DataFlowManager.HighScore _hs;
+    private Text _bestPlayerText;
 
     
     // Start is called before the first frame update
     void Start()
     {
+        _name = DataFlowManager.Instance.PlayerName;
+        _hs = DataFlowManager.Instance.CurrentHighScore;
+        _bestPlayerText = bestPlayerGo.GetComponent<Text>();
+
+        _bestPlayerText.text = $"Best Score: {_hs.Name}: {_hs.Score}";
         const float step = 0.6f;
         int perLine = Mathf.FloorToInt(4.0f / step);
         
@@ -66,10 +75,18 @@ public class MainManager : MonoBehaviour
     {
         m_Points += point;
         ScoreText.text = $"Score : {m_Points}";
+        if (m_Points > _hs.Score)
+        {
+            _bestPlayerText.text = $"Best Score: {_name}: {m_Points}";
+        }
     }
 
     public void GameOver()
     {
+        if (m_Points > _hs.Score)
+        {
+            DataFlowManager.Instance.SaveHighScore(_name, m_Points);
+        }
         m_GameOver = true;
         GameOverText.SetActive(true);
     }
