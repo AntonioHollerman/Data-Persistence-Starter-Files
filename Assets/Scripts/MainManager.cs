@@ -21,7 +21,7 @@ public class MainManager : MonoBehaviour
     private bool m_GameOver = false;
     private string _name;
     private DataFlowManager.HighScore _hs;
-    private TMP_Text _bestPlayerText;
+    private Text _bestPlayerText;
 
     
     // Start is called before the first frame update
@@ -29,8 +29,8 @@ public class MainManager : MonoBehaviour
     {
         _name = DataFlowManager.Instance.PlayerName;
         _hs = DataFlowManager.Instance.CurrentHighScore;
-        _bestPlayerText = bestPlayerGo.GetComponent<TMP_Text>();
-
+        _bestPlayerText = bestPlayerGo.GetComponent<Text>();
+        
         _bestPlayerText.text = $"Best Score: {_hs.Name}: {_hs.Score}";
         const float step = 0.6f;
         int perLine = Mathf.FloorToInt(4.0f / step);

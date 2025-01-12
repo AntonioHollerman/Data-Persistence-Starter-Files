@@ -9,7 +9,7 @@ using UnityEngine.UI;
 
 public class DataFlowManager : MonoBehaviour
 {
-    [System.Serializable]
+    [Serializable]
     public class HighScore
     {
         public string Name { get; private set; }
@@ -28,16 +28,16 @@ public class DataFlowManager : MonoBehaviour
     public string PlayerName { get; private set; }
     
     public GameObject nameEntryGameObject;
+    public GameObject bestScoreGameObject;
     private TMP_InputField _nameField;
-
-    private void Start()
-    {
-        _nameField = nameEntryGameObject.GetComponent<TMP_InputField>();
-        Instance._nameField = _nameField;
-    }
+    private TextMeshProUGUI  _bestScoreText;
+    
 
     private void Awake()
     {
+        _bestScoreText = bestScoreGameObject.GetComponent<TextMeshProUGUI>();
+        _nameField = nameEntryGameObject.GetComponent<TMP_InputField>();
+        
         // start of new code
         if (Instance != null)
         {
@@ -49,6 +49,7 @@ public class DataFlowManager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
         LoadHighScore();
+        _bestScoreText.text = $"Best Score: {CurrentHighScore.Name} : {CurrentHighScore.Score}";
     }
 
     public void SaveHighScore(string playerName, int newScore)
@@ -76,7 +77,7 @@ public class DataFlowManager : MonoBehaviour
         }
         else
         {
-            CurrentHighScore = new HighScore("Null", 0);
+            CurrentHighScore = new HighScore("None", 0);
         }
     }
 
